@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#ff1f6b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="The Tea">
+<meta property="og:title" content="The Tea ☕ — A Three-Course Situationship">
+<meta property="og:description" content="3 huzz, 1 survivor. A live audiovisual comedy show. 🔥">
+<title>THE TEA ☕ — Live Show</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Anton&family=Inter:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ff4d97;--hotpink:#ff1f6b;--purple:#7b2ff7;--gold:#ffd54a;
+    --green:#27d17a;--red:#ff3b5c;--ink:#1c0a16;--blue:#34c3ff;
+    --duke:#012169;--state:#cc0000;--charlotte:#046a38;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    background:#0a0010;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased;
+    touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  }
+  .display{font-family:'Luckiest Guy',cursive;font-weight:400;letter-spacing:.01em;}
+
+  /* ===== PASSCODE LOCK ===== */
+  #lock{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:5vh 6vw;
+    background:radial-gradient(circle at 30% 20%,#ff7ab8,transparent 55%),radial-gradient(circle at 80% 85%,#7b2ff7,transparent 50%),linear-gradient(135deg,#2a0020,#11001a);
+    color:#fff;transition:opacity .55s ease,transform .55s ease;}
+  #lock.open{opacity:0;transform:scale(1.06);pointer-events:none;}
+  .lockbox{width:min(420px,92vw);text-align:center;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.22);
+    border-radius:28px;padding:2rem 1.5rem 1.7rem;backdrop-filter:blur(14px);box-shadow:0 24px 80px rgba(0,0,0,.5);}
+  .lockbox.shake{animation:shk .45s;}
+  @keyframes shk{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-9px)}40%,60%{transform:translateX(9px)}}
+  .lockemoji{font-size:3.2rem;animation:bob 2.5s ease-in-out infinite;}
+  #lock h2{font-size:clamp(1.8rem,7vw,2.6rem);margin:.3rem 0;}
+  .locksub{font-size:clamp(.9rem,2.4vw,1.1rem);font-weight:700;opacity:.85;max-width:26ch;margin:0 auto 1.3rem;}
+  .dots{display:flex;gap:.9rem;justify-content:center;margin:0 0 1.4rem;}
+  .dot{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.6);transition:.2s;}
+  .dot.on{background:var(--gold);border-color:var(--gold);transform:scale(1.18);box-shadow:0 0 14px rgba(255,213,74,.7);}
+  .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;max-width:300px;margin:0 auto;}
+  .key{font-family:'Inter',sans-serif;font-size:1.5rem;font-weight:800;color:#fff;cursor:pointer;
+    background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.25);border-radius:18px;padding:.65em 0;
+    transition:transform .1s,background .15s;-webkit-tap-highlight-color:transparent;}
+  .key:hover{background:rgba(255,255,255,.24);}
+  .key:active{transform:scale(.9);background:var(--gold);color:#1c0a16;}
+  .key[data-act=clear]{font-size:1rem;}
+  .lockerr{margin-top:1.1rem;font-weight:800;color:var(--gold);opacity:0;transition:.2s;min-height:1.2em;}
+  .lockerr.show{opacity:1;}
+
+  /* ===== START OVERLAY ===== */
+  #overlay{
+    position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;gap:1.4rem;padding:6vh 6vw;
+    background:radial-gradient(circle at 30% 20%,#ff7ab8,transparent 55%),radial-gradient(circle at 80% 80%,#7b2ff7,transparent 50%),linear-gradient(135deg,#ff1f6b,#7b2ff7);
+    color:#fff;transition:opacity .6s ease;
+  }
+  #overlay.hide{opacity:0;pointer-events:none;}
+  #overlay h1{font-size:clamp(3rem,12vw,8rem);line-height:.95;text-shadow:0 8px 30px rgba(0,0,0,.35);}
+  #overlay .cup{font-size:clamp(3.5rem,10vw,6rem);animation:bob 2.5s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-16px) rotate(4deg)}}
+  .startbtn{
+    font-family:'Luckiest Guy',cursive;font-size:clamp(1.4rem,4vw,2.4rem);
+    padding:.6em 1.4em;border:none;border-radius:999px;cursor:pointer;color:#fff;
+    background:linear-gradient(90deg,#ff1f6b,#ff8a3d);box-shadow:0 12px 40px rgba(0,0,0,.4),0 0 0 4px rgba(255,255,255,.25) inset;
+    transition:transform .15s ease;animation:pulse 1.8s ease-in-out infinite;
+  }
+  .startbtn:hover{transform:scale(1.06);}
+  @keyframes pulse{0%,100%{box-shadow:0 12px 40px rgba(0,0,0,.4),0 0 0 4px rgba(255,255,255,.25) inset}50%{box-shadow:0 12px 60px rgba(255,213,74,.6),0 0 0 6px rgba(255,255,255,.4) inset}}
+  .opts{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:.4rem;}
+  .opt{display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.35);
+    border-radius:999px;padding:.5em 1.1em;font-weight:800;cursor:pointer;user-select:none;font-size:clamp(.85rem,2vw,1.1rem);}
+  .opt input{accent-color:var(--gold);width:1.1em;height:1.1em;}
+  .startnote{opacity:.9;font-size:clamp(.8rem,2vw,1.05rem);max-width:34ch;font-weight:700;}
+  .audwarn{font-size:.8rem;opacity:.8;font-weight:700;}
+
+  /* ===== DECK ===== */
+  .deck{position:relative;height:100vh;width:100vw;}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:safe center;
+    text-align:center;padding:7vh 7vw 12vh;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+  .slide::-webkit-scrollbar{display:none;}
+  .slide.active{display:flex;animation:slin .55s cubic-bezier(.2,.8,.2,1);}
+  @keyframes slin{from{opacity:0;transform:scale(.97) translateY(22px)}to{opacity:1;transform:none}}
+
+  .bg-title{background:radial-gradient(circle at 30% 20%,#ff7ab8,transparent 55%),radial-gradient(circle at 80% 80%,#7b2ff7,transparent 50%),linear-gradient(135deg,#ff1f6b,#7b2ff7);color:#fff;}
+  .bg-cream{background:linear-gradient(160deg,#fff4fa,#ffe3f1);}
+  .bg-duke{background:radial-gradient(circle at 70% 15%,#1746d455,transparent 55%),linear-gradient(150deg,#02103f,#012169);color:#fff;}
+  .bg-state{background:radial-gradient(circle at 25% 20%,#ff5c3844,transparent 55%),linear-gradient(150deg,#2e0000,#cc0000);color:#fff;}
+  .bg-charlotte{background:radial-gradient(circle at 75% 80%,#27d17a44,transparent 55%),linear-gradient(150deg,#04361e,#046a38);color:#fff;}
+  .bg-dark{background:radial-gradient(circle at 50% 0%,#ff1f6b44,transparent 60%),linear-gradient(160deg,#160012,#36002a);color:#fff;}
+  .bg-gold{background:linear-gradient(160deg,#ffd54a,#ff9a3d);}
+
+  h1{font-size:clamp(2.4rem,7.5vw,6rem);line-height:1;letter-spacing:-.01em;}
+  h2{font-size:clamp(1.9rem,5.5vw,4rem);line-height:1.04;font-weight:900;letter-spacing:-.02em;}
+  h3{font-size:clamp(1.2rem,3.2vw,2rem);font-weight:900;}
+  p{font-size:clamp(1.05rem,2.5vw,1.8rem);line-height:1.4;max-width:24ch;font-weight:700;}
+  .sub{font-size:clamp(.95rem,2.3vw,1.45rem);font-weight:700;opacity:.92;margin-top:1.1rem;max-width:34ch;}
+  .kicker{text-transform:uppercase;letter-spacing:.32em;font-size:clamp(.65rem,1.6vw,.95rem);font-weight:900;opacity:.88;margin-bottom:1rem;display:flex;gap:.6em;align-items:center;justify-content:center;}
+  .tag{position:absolute;top:4.5vh;left:50%;transform:translateX(-50%);font-size:clamp(.65rem,1.5vw,.9rem);font-weight:900;letter-spacing:.35em;text-transform:uppercase;opacity:.75;}
+
+  /* logos */
+  .watermark{position:absolute;width:min(62vh,62vw);max-width:680px;opacity:.10;filter:grayscale(.2);pointer-events:none;
+    top:50%;left:50%;transform:translate(-50%,-50%);z-index:0;animation:wmspin 60s linear infinite;}
+  @keyframes wmspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+  .slide > *{position:relative;z-index:1;}
+  .team-logo{height:clamp(70px,14vh,150px);filter:drop-shadow(0 10px 24px rgba(0,0,0,.45));}
+  .logo-row{display:flex;gap:.6rem;align-items:center;justify-content:center;flex-wrap:wrap;}
+  .brand{height:1.1em;vertical-align:-.18em;}
+
+  /* gifs / memes */
+  .gif{border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.45);border:3px solid rgba(255,255,255,.7);
+    object-fit:cover;max-width:88vw;background:#0003;}
+  .gif.sm{height:clamp(140px,26vh,240px);width:auto;}
+  .gif.md{height:clamp(180px,34vh,320px);width:auto;}
+  .gif-fallback{display:flex;align-items:center;justify-content:center;font-size:5rem;background:#00000033;}
+  .meme{position:relative;display:inline-block;}
+  .meme .cap{position:absolute;left:0;right:0;text-align:center;font-family:'Anton',Impact,sans-serif;
+    color:#fff;text-transform:uppercase;line-height:1;-webkit-text-stroke:2px #000;text-stroke:2px #000;
+    text-shadow:2px 2px 0 #000;font-size:clamp(1.1rem,3.2vw,2rem);padding:.2em .3em;letter-spacing:.02em;}
+  .meme .cap.top{top:.25em;}
+  .meme .cap.bot{bottom:.25em;}
+
+  .pill{display:inline-block;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);border:2px solid rgba(255,255,255,.4);
+    border-radius:999px;padding:.4em 1.05em;font-weight:900;font-size:clamp(.85rem,2vw,1.25rem);margin:.3rem;}
+  .pill.bad{background:rgba(255,59,92,.3);border-color:var(--red);}
+  .pill.good{background:rgba(39,209,122,.3);border-color:var(--green);}
+
+  .quote{font-family:'Anton',sans-serif;font-style:normal;font-size:clamp(1.5rem,4.6vw,3.2rem);line-height:1.1;max-width:17ch;text-transform:none;}
+  .attr{margin-top:1.2rem;font-size:clamp(.95rem,2.2vw,1.3rem);font-weight:800;opacity:.82;}
+
+  /* chat */
+  .chat{display:flex;flex-direction:column;gap:.7rem;width:min(680px,90vw);margin-top:.6rem;}
+  .bubble{padding:.7em 1.05em;border-radius:22px;font-size:clamp(1rem,2.3vw,1.45rem);font-weight:700;line-height:1.3;max-width:82%;text-align:left;display:inline-flex;align-items:center;gap:.5em;}
+  .them{align-self:flex-start;background:#e9e9eb;color:#111;border-bottom-left-radius:6px;}
+  .me{align-self:flex-end;background:#0a84ff;color:#fff;border-bottom-right-radius:6px;}
+
+  .flags{display:flex;flex-wrap:wrap;gap:.6rem .9rem;justify-content:center;margin-top:1.3rem;max-width:44ch;}
+  .flag{font-size:clamp(.95rem,2.1vw,1.35rem);font-weight:800;border-radius:14px;padding:.5em .9em;display:flex;gap:.5em;align-items:center;}
+  .flag.red{background:rgba(255,59,92,.22);border:1px solid rgba(255,59,92,.5);}
+  .flag.green{background:rgba(39,209,122,.22);border:1px solid rgba(39,209,122,.5);}
+
+  .stat-row{display:flex;gap:clamp(1rem,5vw,4rem);flex-wrap:wrap;justify-content:center;margin-top:1.8rem;}
+  .stat{display:flex;flex-direction:column;align-items:center;}
+  .stat .num{font-family:'Luckiest Guy',cursive;font-size:clamp(2.6rem,8vw,5rem);line-height:1;}
+  .stat .lab{font-size:clamp(.75rem,1.7vw,1.05rem);font-weight:900;opacity:.85;text-transform:uppercase;letter-spacing:.1em;margin-top:.4rem;}
+
+  .card-row{display:flex;gap:clamp(.8rem,3vw,1.8rem);flex-wrap:wrap;justify-content:center;margin-top:1.6rem;}
+  .card{background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);border-radius:24px;padding:1.2rem 1rem;
+    width:min(250px,82vw);backdrop-filter:blur(8px);}
+  .card .team-logo{height:clamp(56px,9vh,84px);margin-bottom:.5rem;}
+  .card h3{margin:.2rem 0;}
+  .card p{font-size:.98rem;max-width:none;opacity:.94;font-weight:700;}
+
+  /* meter */
+  .meter{width:min(620px,86vw);margin-top:1.4rem;text-align:left;}
+  .meter .lbl{display:flex;justify-content:space-between;font-weight:900;margin:.5rem 0 .25rem;font-size:clamp(.9rem,2vw,1.2rem);}
+  .meter .track{height:22px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden;}
+  .meter-fill{height:100%;width:0;border-radius:999px;transition:width 1.3s cubic-bezier(.2,.9,.2,1);}
+  .meter-fill.r{background:linear-gradient(90deg,#ff8a3d,#ff3b5c);}
+  .meter-fill.g{background:linear-gradient(90deg,#27d17a,#0fae8f);}
+
+  /* poll */
+  .poll-grid{display:flex;gap:clamp(.8rem,3vw,1.8rem);flex-wrap:wrap;justify-content:center;margin-top:1.4rem;}
+  .poll-btn{cursor:pointer;background:rgba(255,255,255,.12);border:3px solid rgba(255,255,255,.35);border-radius:22px;
+    padding:1.1rem 1rem;width:min(200px,40vw);transition:transform .15s ease,border-color .2s;display:flex;flex-direction:column;align-items:center;gap:.5rem;color:inherit;font-weight:900;font-size:clamp(.9rem,2vw,1.2rem);}
+  .poll-btn:not(:disabled):hover{transform:translateY(-6px) scale(1.03);border-color:#fff;}
+  .poll-btn .team-logo{height:clamp(50px,9vh,80px);}
+  .poll-btn.winner{border-color:var(--green);background:rgba(39,209,122,.25);animation:win .6s ease;}
+  .poll-btn.loser{opacity:.4;filter:grayscale(.7);}
+  @keyframes win{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+  #pollResult{margin-top:1.4rem;opacity:0;transform:translateY(12px);transition:.5s;font-size:clamp(1.1rem,3vw,2rem);font-weight:900;}
+  #pollResult.show{opacity:1;transform:none;}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(24px) scale(.97);transition:opacity .45s ease,transform .45s cubic-bezier(.2,.9,.2,1);}
+  .reveal.shown{opacity:1;transform:none;}
+  .float{animation:flt 4s ease-in-out infinite;}
+  @keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+  /* chrome */
+  #confetti{position:fixed;inset:0;z-index:120;pointer-events:none;}
+  .progress{position:fixed;top:0;left:0;height:5px;width:0;background:var(--gold);z-index:130;transition:width .45s ease;}
+  .controls{position:fixed;bottom:0;left:0;right:0;z-index:130;display:flex;align-items:center;gap:.4rem;
+    padding:.5rem .8rem;background:linear-gradient(0deg,rgba(0,0,0,.55),transparent);}
+  .ctrl{width:2.6rem;height:2.6rem;border-radius:50%;border:none;cursor:pointer;color:#fff;font-size:1rem;
+    background:rgba(255,255,255,.16);backdrop-filter:blur(8px);transition:background .15s,transform .15s;display:grid;place-items:center;}
+  .ctrl:hover{background:rgba(255,255,255,.32);transform:translateY(-2px);}
+  .ctrl.on{background:var(--gold);color:#1c0a16;}
+  .ctrl.big{width:3.2rem;height:3.2rem;font-size:1.2rem;}
+  .spacer{flex:1;}
+  .counter{color:#fff;font-weight:900;font-size:.85rem;letter-spacing:.08em;padding:0 .5rem;}
+  .hintbar{position:fixed;bottom:3.6rem;left:0;right:0;text-align:center;color:#fff;font-weight:700;font-size:.75rem;opacity:.6;z-index:115;pointer-events:none;mix-blend-mode:difference;}
+  .clickme{display:inline-flex;align-items:center;gap:.4em;margin-top:1rem;font-size:clamp(.8rem,1.8vw,1rem);font-weight:800;opacity:.85;animation:flt 2s ease-in-out infinite;}
+  @media (max-width:640px){
+    .slide{padding:7.5vh 5vw 13vh;}
+    p{max-width:92vw;}
+    h1{font-size:clamp(2.1rem,9.5vw,3.6rem);}
+    h2{font-size:clamp(1.7rem,7vw,2.6rem);}
+    h3{font-size:clamp(1.15rem,4.5vw,1.6rem);}
+    .quote{font-size:clamp(1.35rem,6vw,2.2rem);max-width:90vw;}
+    .sub{max-width:90vw;}
+    .gif.md{height:clamp(150px,24vh,260px);}
+    .gif.sm{height:clamp(120px,18vh,200px);}
+    .chat{width:95vw;}
+    .bubble{max-width:88%;font-size:1.05rem;}
+    .card-row{gap:.7rem;}
+    .card{width:min(320px,90vw);}
+    .card p{font-size:.92rem;}
+    .poll-grid{gap:.7rem;}
+    .poll-btn{width:min(150px,42vw);padding:.9rem .6rem;}
+    .meter{width:94vw;}
+    .controls{gap:.3rem;padding:.4rem .5rem;}
+    .ctrl{width:2.3rem;height:2.3rem;font-size:.9rem;}
+    .ctrl.big{width:2.7rem;height:2.7rem;}
+    .counter{font-size:.72rem;padding:0 .25rem;}
+    .stat-row{gap:1.6rem;}
+    .hintbar{font-size:.68rem;bottom:3.2rem;}
+    #overlay h1{font-size:clamp(2.6rem,15vw,4.5rem);}
+    .opts{gap:.5rem;}
+    .opt{font-size:.85rem;padding:.45em .9em;}
+  }
+  @media (max-height:600px){
+    .slide{padding:5.5vh 5vw 10vh;}
+    .gif.md{height:clamp(110px,30vh,210px);}
+    .gif.sm{height:clamp(90px,22vh,160px);}
+    .watermark{opacity:.07;}
+  }
+</style>
+</head>
+<body class="pre">
+
+<!-- PASSCODE LOCK -->
+<div id="lock">
+  <div class="lockbox">
+    <div class="lockemoji">🔒</div>
+    <h2 class="display">PRIVATE TEA</h2>
+    <p class="locksub">members only ☕ enter the code to spill in</p>
+    <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+    <div class="keypad">
+      <button class="key" data-k="1">1</button>
+      <button class="key" data-k="2">2</button>
+      <button class="key" data-k="3">3</button>
+      <button class="key" data-k="4">4</button>
+      <button class="key" data-k="5">5</button>
+      <button class="key" data-k="6">6</button>
+      <button class="key" data-k="7">7</button>
+      <button class="key" data-k="8">8</button>
+      <button class="key" data-k="9">9</button>
+      <button class="key" data-act="clear">clear</button>
+      <button class="key" data-k="0">0</button>
+      <button class="key" data-act="back">⌫</button>
+    </div>
+    <div class="lockerr">nope — try again 💅</div>
+  </div>
+</div>
+
+<!-- START OVERLAY -->
+<div id="overlay">
+  <div class="cup">☕</div>
+  <h1 class="display">THE TEA</h1>
+  <p class="startnote">A 3-course situationship saga — now with sound, logos, memes &amp; a live audience poll. 🎤</p>
+  <button class="startbtn" id="startBtn"><i class="fa-solid fa-play"></i> START THE SHOW</button>
+  <div class="opts">
+    <label class="opt"><input type="checkbox" id="optSound" checked> <i class="fa-solid fa-volume-high"></i> Sound FX</label>
+    <label class="opt"><input type="checkbox" id="optMusic" checked> <i class="fa-solid fa-music"></i> Music</label>
+    <label class="opt"><input type="checkbox" id="optAuto"> <i class="fa-solid fa-clapperboard"></i> Auto-play (watch alone)</label>
+  </div>
+  <div class="audwarn"><i class="fa-solid fa-headphones"></i> Headphones / speakers recommended · best in fullscreen</div>
+</div>
+
+<canvas id="confetti"></canvas>
+<div class="progress" id="progress"></div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 TITLE -->
+  <section class="slide bg-title" data-sfx="sparkle" data-dwell="4">
+    <img class="watermark" src="https://cdn.simpleicons.org/tinder/ffffff" onerror="this.style.display='none'">
+    <div class="cup display" style="font-size:clamp(3rem,9vw,6rem)">☕</div>
+    <h1 class="display">THE TEA</h1>
+    <p class="sub reveal">A three-course situationship. Steeped, scalding, and served to you live. 🔥</p>
+    <div class="reveal" style="margin-top:1rem">
+      <span class="pill"><i class="fa-solid fa-graduation-cap"></i> College edition</span>
+      <span class="pill"><i class="fa-solid fa-fire"></i> Unfiltered</span>
+      <span class="pill"><img class="brand" src="https://cdn.simpleicons.org/tinder/ffffff" onerror="this.remove()"> Receipts included</span>
+    </div>
+  </section>
+
+  <!-- 2 DISCLAIMER -->
+  <section class="slide bg-dark" data-sfx="scratch" data-dwell="4.5">
+    <div class="kicker"><i class="fa-solid fa-triangle-exclamation"></i> Mandatory disclaimer</div>
+    <h2>What you're about to hear<br>cannot be unheard.</h2>
+    <img class="gif sm reveal" data-fallback="🤐" data-sfx="boing" src="https://media.giphy.com/media/jN2ZFtiPyFxwVaaBbo/giphy.gif" onerror="gifFail(this)" style="margin-top:1.2rem">
+    <p class="sub reveal">No screenshots. No reposting. If you recognize anyone — congrats, you saw nothing. 🤫</p>
+  </section>
+
+  <!-- 3 PREMISE -->
+  <section class="slide bg-cream" data-sfx="ding" data-dwell="5">
+    <div class="kicker" style="color:#b3005a"><i class="fa-solid fa-chart-simple"></i> The situation</div>
+    <h2 style="color:#1c0a16">I had <span style="color:var(--hotpink)">three</span> talking stages.</h2>
+    <p class="reveal" style="color:#3a1228;max-width:30ch;margin-top:.8rem">A reality dating show — except no producers, no prize money, and the contestants didn't know they were competing.</p>
+    <div class="stat-row reveal" style="color:#1c0a16">
+      <div class="stat"><span class="num" style="color:var(--purple)">3</span><span class="lab">Huzz acquired</span></div>
+      <div class="stat"><span class="num" style="color:var(--purple)">2</span><span class="lab">Eliminated</span></div>
+      <div class="stat"><span class="num" style="color:var(--hotpink)">1</span><span class="lab">Still standing</span></div>
+    </div>
+  </section>
+
+  <!-- 4 CONTESTANTS -->
+  <section class="slide bg-title" data-sfx="airhorn" data-dwell="6">
+    <div class="kicker"><i class="fa-solid fa-crown"></i> Tonight's lineup</div>
+    <h2>Meet the contestants.</h2>
+    <div class="card-row">
+      <div class="card reveal"><img class="team-logo" src="https://a.espncdn.com/i/teamlogos/ncaa/500/150.png" onerror="this.style.display='none'"><h3>The Blue Devil</h3><p>📍 Duke · the fuckboy<br>Skill: commitment issues + a great… personality</p></div>
+      <div class="card reveal"><img class="team-logo" src="https://a.espncdn.com/i/teamlogos/ncaa/500/152.png" onerror="this.style.display='none'"><h3>Miss Chalant</h3><p>📍 NC State · the intense one<br>Skill: paragraphs &amp; astrology</p></div>
+      <div class="card reveal"><img class="team-logo" src="https://a.espncdn.com/i/teamlogos/ncaa/500/2429.png" onerror="this.style.display='none'"><h3>The Green Flag</h3><p>📍 UNC Charlotte · the normal one<br>Skill: being genuinely nice (suspicious)</p></div>
+    </div>
+  </section>
+
+  <!-- ===== ACT I : DUKE ===== -->
+  <section class="slide bg-duke" data-sfx="airhorn" data-dwell="5">
+    <div class="tag" style="color:#9db4ff">Act I</div>
+    <img class="watermark" src="https://a.espncdn.com/i/teamlogos/ncaa/500/150.png" onerror="this.style.display='none'">
+    <img class="team-logo float" src="https://a.espncdn.com/i/teamlogos/ncaa/500/150.png" onerror="this.style.display='none'">
+    <h1 class="display" style="margin-top:1rem">THE BLUE DEVIL</h1>
+    <p class="sub reveal">aka my sneaky link · aka "fuck this guy" · aka the one I'm still kinda mad about 😈</p>
+    <div class="reveal" style="margin-top:1rem"><span class="pill">📍 Duke</span><span class="pill"><i class="fa-solid fa-medal"></i> Matched first</span></div>
+  </section>
+
+  <section class="slide bg-duke" data-sfx="pop" data-dwell="5">
+    <div class="kicker" style="color:#9db4ff"><i class="fa-solid fa-comment-dots"></i> The honeymoon (lol)</div>
+    <h2>Two weeks of <span style="color:var(--gold)">yapping.</span></h2>
+    <img class="gif md reveal" data-fallback="💬" data-sfx="pop" src="https://media.giphy.com/media/3o7TKODOrxeERtv8ru/giphy.gif" onerror="gifFail(this)" style="margin-top:1rem">
+    <p class="sub reveal">Matched. Texted nonstop. Met up. Vibes immaculate. Talked even more. Me: "is this… going somewhere?" 👀</p>
+  </section>
+
+  <section class="slide bg-duke" data-sfx="boing" data-dwell="6">
+    <div class="kicker" style="color:#9db4ff"><i class="fa-solid fa-heart-crack"></i> Plot twist #1</div>
+    <div class="chat">
+      <div class="bubble them reveal" data-sfx="pop">ok so… I don't think I'll ever be able to commit 🫠</div>
+      <div class="bubble me reveal" data-sfx="boing">eh it's fine, not expecting anything serious either 💅</div>
+    </div>
+    <p class="sub reveal">Reader: one of us was lying. (It was nobody. We just started hooking up.)</p>
+  </section>
+
+  <section class="slide bg-duke" data-sfx="airhorn" data-dwell="6">
+    <div class="kicker" style="color:#9db4ff"><i class="fa-solid fa-pen-nib"></i> Honest journalism corner</div>
+    <h2>It was, regrettably, the<br><span style="color:var(--gold)">best I've ever had.</span></h2>
+    <div class="meme reveal" data-sfx="airhorn" style="margin-top:1rem">
+      <img class="gif md" data-fallback="🛐" src="https://media.giphy.com/media/3o6Mb4jsttrPz3HsEE/giphy.gif" onerror="gifFail(this)">
+      <div class="cap bot">the data is compromised</div>
+    </div>
+    <p class="sub reveal">The WORST thing a toxic man can do. 📈</p>
+  </section>
+
+  <section class="slide bg-duke" data-sfx="scratch" data-dwell="6">
+    <div class="kicker" style="color:#9db4ff"><i class="fa-solid fa-martini-glass-citrus"></i> Plot twist #2 · the stand-up</div>
+    <h3>Time was set. Time came. I texted.</h3>
+    <div class="chat" style="margin-top:.8rem">
+      <div class="bubble me reveal" data-sfx="pop">hey we still on? 🙂</div>
+      <div class="bubble them reveal" data-sfx="scratch">oh I'm sorry… lowk too drunk 💀</div>
+    </div>
+    <img class="gif sm reveal" data-fallback="🍺" data-sfx="buzzer" src="https://media.giphy.com/media/fPI2ymej8ZEBI332VN/giphy.gif" onerror="gifFail(this)" style="margin-top:1rem">
+    <p class="sub reveal">"Lowk too drunk." A full sentence. A diagnosis. A red flag with its own zip code. 🚩</p>
+  </section>
+
+  <section class="slide bg-duke" data-sfx="buzzer" data-dwell="6">
+    <div class="kicker" style="color:#9db4ff"><i class="fa-solid fa-fire-flame-curved"></i> The blow-up → the grovel</div>
+    <h2>So I went <span style="color:var(--red)">OFF.</span></h2>
+    <div class="meme reveal" data-sfx="buzzer" style="margin-top:.8rem">
+      <img class="gif md" data-fallback="😡" src="https://media.giphy.com/media/K3mh6D8DUuJ6fEq4SQ/giphy.gif" onerror="gifFail(this)">
+      <div class="cap top">full essay</div><div class="cap bot">on how he did me wrong</div>
+    </div>
+    <p class="sub reveal">He swore up &amp; down, never again. Me, strong independent woman: "ok fine 😌" <span style="opacity:.75">…then hooked up 2 more times.</span></p>
+  </section>
+
+  <section class="slide bg-duke" data-sfx="sadtrombone" data-dwell="6">
+    <div class="kicker" style="color:#9db4ff"><i class="fa-solid fa-ghost"></i> The finale</div>
+    <h2>Then he got <span style="color:var(--gold)">pretentious.</span></h2>
+    <img class="gif md reveal" data-fallback="👻" data-sfx="sadtrombone" src="https://media.giphy.com/media/JrZA1poLOn7T5zvlXx/giphy.gif" onerror="gifFail(this)" style="margin-top:1rem">
+    <p class="sub reveal">Texts slowed. Then stopped. Haven't spoken in 2 weeks. The sneaky link vanished into the fog. 🌫️</p>
+    <div class="reveal" style="margin-top:.8rem"><span class="pill bad">Verdict: fuck this guy 🫡</span></div>
+  </section>
+
+  <!-- ===== ACT II : NC STATE ===== -->
+  <section class="slide bg-state" data-sfx="ding" data-dwell="5">
+    <div class="tag" style="color:#ffb3a7">Act II</div>
+    <img class="watermark" src="https://a.espncdn.com/i/teamlogos/ncaa/500/152.png" onerror="this.style.display='none'">
+    <img class="team-logo float" src="https://a.espncdn.com/i/teamlogos/ncaa/500/152.png" onerror="this.style.display='none'">
+    <h1 class="display" style="margin-top:1rem">MISS CHALANT</h1>
+    <p class="sub reveal">The exact opposite of the fuckboy. She was… present. Extremely, terrifyingly present. 🚩</p>
+    <div class="reveal" style="margin-top:1rem"><span class="pill">📍 NC State</span><span class="pill"><i class="fa-solid fa-envelope-open-text"></i> She asked ME out</span></div>
+  </section>
+
+  <section class="slide bg-state" data-sfx="pop" data-dwell="6">
+    <div class="kicker" style="color:#ffb3a7"><i class="fa-regular fa-face-grin-squint"></i> Pre-date · the sticker arc</div>
+    <h3>I said I love stickers of my friends &amp; fam 🥰</h3>
+    <div class="chat" style="margin-top:.7rem">
+      <div class="bubble them reveal" data-sfx="pop">do you have a sticker of yourself?</div>
+      <div class="bubble me reveal" data-sfx="pop">yeah but it's foul 💀</div>
+      <div class="bubble them reveal" data-sfx="pop">send it &amp; I'll send a foul one of me 🤝</div>
+      <div class="bubble me reveal" data-sfx="boing">no thank u 🙅‍♀️</div>
+    </div>
+  </section>
+
+  <section class="slide bg-state" data-sfx="boing" data-dwell="7">
+    <div class="kicker" style="color:#ffb3a7"><i class="fa-solid fa-scroll"></i> …then came THE paragraph</div>
+    <p class="quote reveal">"if you sent a sticker you'd feel more human to me… I can't believe we matched, you're gorgeous and I'm just <span style="color:var(--gold)">chopped liver</span>"</p>
+    <img class="gif sm reveal" data-fallback="😰" data-sfx="boing" src="https://media.giphy.com/media/3oz8xLlw6GHVfokaNW/giphy.gif" onerror="gifFail(this)" style="margin-top:1rem">
+    <p class="attr reveal">— an actual paragraph, sent before date #1</p>
+  </section>
+
+  <section class="slide bg-state" data-sfx="rimshot" data-dwell="5">
+    <h2>I left her on read.</h2>
+    <img class="gif md reveal" data-fallback="🧍‍♀️" data-sfx="rimshot" src="https://media.giphy.com/media/2UCt7zbmsLoCXybx6t/giphy.gif" onerror="gifFail(this)" style="margin-top:1rem">
+    <p class="sub reveal">Not out of malice. Out of pure "what in the self-deprecation do I say to that." 😶</p>
+  </section>
+
+  <section class="slide bg-state" data-sfx="rimshot" data-dwell="6">
+    <div class="kicker" style="color:#ffb3a7"><i class="fa-regular fa-clock"></i> One hour later…</div>
+    <div class="chat">
+      <div class="bubble them reveal" data-sfx="pop">sorry that came off strong 😬</div>
+      <div class="bubble me reveal" data-sfx="rimshot">i don't think you're chopped but i honestly didn't know what to say to that 🧎‍♀️</div>
+    </div>
+    <p class="sub reveal">Diplomacy. Honesty. A future hostage negotiator. 🏆</p>
+  </section>
+
+  <section class="slide bg-state" data-sfx="ding" data-dwell="6">
+    <div class="kicker" style="color:#ffb3a7"><i class="fa-solid fa-mug-hot"></i> We STILL went on the date (?!)</div>
+    <h2>And honestly… she <span style="color:var(--gold)">delivered.</span></h2>
+    <img class="gif sm reveal" data-fallback="🍵" data-sfx="ding" src="https://media.giphy.com/media/whB7Xi4t0C2YAx6QEJ/giphy.gif" onerror="gifFail(this)" style="margin-top:.8rem">
+    <div class="flags">
+      <span class="flag green reveal" data-sfx="ding"><i class="fa-solid fa-car-side"></i> Drove from Raleigh to get me</span>
+      <span class="flag green reveal" data-sfx="ding"><i class="fa-solid fa-cookie-bite"></i> Brought cookies</span>
+      <span class="flag green reveal" data-sfx="ding"><i class="fa-solid fa-mug-saucer"></i> Paid for my matcha</span>
+    </div>
+  </section>
+
+  <section class="slide bg-state" data-sfx="buzzer" data-dwell="6">
+    <div class="kicker" style="color:#ffb3a7"><i class="fa-solid fa-star-of-life"></i> Post-date · the astrology incident</div>
+    <div class="chat">
+      <div class="bubble them reveal" data-sfx="pop">when's your birthday?</div>
+      <div class="bubble me reveal" data-sfx="pop">…why</div>
+      <div class="bubble them reveal" data-sfx="buzzer">all of my exes are also capricorn ♑️</div>
+    </div>
+    <img class="gif sm reveal" data-fallback="😳" data-sfx="scratch" src="https://media.giphy.com/media/nC1toglzIfNFC/giphy.gif" onerror="gifFail(this)" style="margin-top:.9rem">
+    <p class="sub reveal">Ma'am this is a first date, not a forensic pattern analysis. 🔍</p>
+  </section>
+
+  <section class="slide bg-state" data-sfx="sadtrombone" data-dwell="6">
+    <div class="kicker" style="color:#ffb3a7"><i class="fa-solid fa-ghost"></i> The slow fade → the ghost</div>
+    <h2>So I replied… <span style="color:var(--gold)">slower.</span> 🐌</h2>
+    <img class="gif md reveal" data-fallback="👻" data-sfx="sadtrombone" src="https://media.giphy.com/media/JrZA1poLOn7T5zvlXx/giphy.gif" onerror="gifFail(this)" style="margin-top:.8rem">
+    <p class="sub reveal">Said I can't commit before Dallas. She said "let's be friends!" Kept texting. Texted again the day before my flight. I became… unreachable. ✈️👻</p>
+  </section>
+
+  <!-- ===== ACT III : CHARLOTTE ===== -->
+  <section class="slide bg-charlotte" data-sfx="sparkle" data-dwell="5">
+    <div class="tag" style="color:#a7ffce">Act III</div>
+    <img class="watermark" src="https://a.espncdn.com/i/teamlogos/ncaa/500/2429.png" onerror="this.style.display='none'">
+    <img class="team-logo float" src="https://a.espncdn.com/i/teamlogos/ncaa/500/2429.png" onerror="this.style.display='none'">
+    <h1 class="display" style="margin-top:1rem">THE GREEN FLAG</h1>
+    <p class="sub reveal">The normal one. So normal it was genuinely disorienting. I kept waiting for the catch. 💚</p>
+    <div class="reveal" style="margin-top:1rem"><span class="pill">📍 UNC Charlotte</span><span class="pill"><i class="fa-solid fa-dumbbell"></i> Built different (literally)</span></div>
+  </section>
+
+  <section class="slide bg-charlotte" data-sfx="scratch" data-dwell="6">
+    <div class="kicker" style="color:#a7ffce"><i class="fa-solid fa-people-roof"></i> Immediate complication</div>
+    <h2>We're in the <span style="color:var(--gold)">same greek life circle.</span> 🏛️</h2>
+    <img class="gif md reveal" data-fallback="💪" data-sfx="sparkle" src="https://media.giphy.com/media/LOEFObT99LmYaxB5lq/giphy.gif" onerror="gifFail(this)" style="margin-top:1rem">
+    <p class="sub reveal">Matched first, did the math second. Not ideal! Anyway 🤷‍♀️ he's buff and we've been talking since the start of May.</p>
+  </section>
+
+  <section class="slide bg-charlotte" data-sfx="ding" data-dwell="6">
+    <div class="kicker" style="color:#a7ffce"><i class="fa-solid fa-clipboard-check"></i> The evidence</div>
+    <h2>3 dates. He planned <span style="color:var(--gold)">everything.</span></h2>
+    <div class="flags">
+      <span class="flag green reveal" data-sfx="ding"><i class="fa-solid fa-calendar-check"></i> Plans every detail</span>
+      <span class="flag green reveal" data-sfx="ding"><i class="fa-solid fa-car-side"></i> Drove an hour each way, every time</span>
+      <span class="flag green reveal" data-sfx="ding"><i class="fa-solid fa-tv"></i> Rewatched a whole season of The Boys w/ me</span>
+    </div>
+    <p class="sub reveal">A man who reruns content he's already seen just to sit next to you? Suspiciously high value. 📈</p>
+  </section>
+
+  <section class="slide bg-charlotte" data-sfx="ding" data-dwell="7">
+    <div class="kicker" style="color:#a7ffce"><i class="fa-solid fa-gift"></i> The grand gesture</div>
+    <div class="meme reveal" data-sfx="ding">
+      <img class="gif md" data-fallback="🧸" src="https://media.giphy.com/media/VsavUvtIoOLuWmYKyR/giphy.gif" onerror="gifFail(this)">
+      <div class="cap top">midnight · 1hr round trip</div><div class="cap bot">just to drop a plushie</div>
+    </div>
+    <p class="sub reveal">Because I'd be getting home late before Dallas. Sir. SIR. This is a Wendy's level of devotion. 🥹</p>
+  </section>
+
+  <section class="slide bg-charlotte" data-sfx="boing" data-dwell="6">
+    <div class="kicker" style="color:#a7ffce"><i class="fa-solid fa-circle-question"></i> The one catch</div>
+    <h2>He's serious. He's kind.<br>The only problem…</h2>
+    <img class="gif sm reveal" data-fallback="🫠" data-sfx="boing" src="https://media.giphy.com/media/WRQBXSCnEFJIuxktnw/giphy.gif" onerror="gifFail(this)" style="margin-top:.8rem">
+    <p class="reveal" style="font-size:clamp(1.3rem,3.5vw,2.3rem);color:var(--gold);font-weight:900;margin-top:.8rem;max-width:28ch">I need to figure out if I actually like him. 🫠</p>
+    <p class="sub reveal">Classic. Finally find a green flag and my brain goes "but is it… too green?" 😵‍💫</p>
+  </section>
+
+  <!-- ===== SCOREBOARD ===== -->
+  <section class="slide bg-dark" data-sfx="buzzer" data-dwell="7" data-action="meter">
+    <div class="kicker"><i class="fa-solid fa-flag"></i> The official red flag-o-meter</div>
+    <h2>The Scoreboard</h2>
+    <div class="meter">
+      <div class="lbl"><span><img class="brand" src="https://a.espncdn.com/i/teamlogos/ncaa/500/150.png" onerror="this.remove()"> Blue Devil</span><span>🚩🚩🚩</span></div>
+      <div class="track"><div class="meter-fill r" data-w="90%"></div></div>
+      <div class="lbl"><span><img class="brand" src="https://a.espncdn.com/i/teamlogos/ncaa/500/152.png" onerror="this.remove()"> Miss Chalant</span><span>🚩🚩</span></div>
+      <div class="track"><div class="meter-fill r" data-w="70%"></div></div>
+      <div class="lbl"><span><img class="brand" src="https://a.espncdn.com/i/teamlogos/ncaa/500/2429.png" onerror="this.remove()"> Green Flag</span><span>💚💚💚</span></div>
+      <div class="track"><div class="meter-fill g" data-w="85%"></div></div>
+    </div>
+    <p class="sub reveal">Two disqualified for excessive red. One suspiciously green. 📊</p>
+  </section>
+
+  <!-- ===== POLL ===== -->
+  <section class="slide bg-gold" data-sfx="drumroll" data-dwell="9" data-action="poll">
+    <div class="kicker" style="color:#5a3a00"><i class="fa-solid fa-hand-point-up"></i> Audience participation</div>
+    <h2 style="color:#1c0a16">Who did she keep??</h2>
+    <p style="color:#3a1228;margin-top:.4rem">Place your bets. 🗳️</p>
+    <div class="poll-grid">
+      <button class="poll-btn" data-c="duke" onclick="vote('duke')" style="color:#1c0a16"><img class="team-logo" src="https://a.espncdn.com/i/teamlogos/ncaa/500/150.png" onerror="this.style.display='none'">Blue Devil 😈</button>
+      <button class="poll-btn" data-c="state" onclick="vote('state')" style="color:#1c0a16"><img class="team-logo" src="https://a.espncdn.com/i/teamlogos/ncaa/500/152.png" onerror="this.style.display='none'">Miss Chalant 🚩</button>
+      <button class="poll-btn" data-c="charlotte" onclick="vote('charlotte')" style="color:#1c0a16"><img class="team-logo" src="https://a.espncdn.com/i/teamlogos/ncaa/500/2429.png" onerror="this.style.display='none'">Green Flag 💚</button>
+    </div>
+    <div id="pollResult" style="color:#1c0a16">🥁 …the Green Flag survives! 💚 (pending her own emotional availability)</div>
+  </section>
+
+  <!-- ===== FINAL ROSE ===== -->
+  <section class="slide bg-gold" data-sfx="cheer" data-dwell="6" data-action="confetti">
+    <div class="kicker" style="color:#5a3a00"><i class="fa-solid fa-trophy"></i> The final rose</div>
+    <img class="gif md float reveal" data-fallback="🌹" data-sfx="cheer" src="https://media.giphy.com/media/Uodi7NBIh8aIaC5hdq/giphy.gif" onerror="gifFail(this)">
+    <h1 class="display" style="color:#1c0a16;margin-top:.6rem">3 HUZZ → 1.</h1>
+    <p class="reveal" style="color:#3a1228;max-width:30ch;margin-top:.6rem">The fuckboy fumbled. The intense one over-texted. The green flag is the last one standing. 😮‍💨</p>
+  </section>
+
+  <!-- ===== THANK YOU ===== -->
+  <section class="slide bg-title" data-sfx="cheer" data-dwell="6" data-action="confetti">
+    <div class="cup display" style="font-size:clamp(3rem,9vw,6rem)">☕</div>
+    <h1 class="display">THAT'S THE TEA.</h1>
+    <p class="sub reveal">Thank you for coming to my situationship TED Talk. 💅</p>
+    <img class="gif sm reveal" data-fallback="👏" data-sfx="cheer" src="https://media.giphy.com/media/BQAk13taTaKYw/giphy.gif" onerror="gifFail(this)" style="margin-top:1rem">
+    <div class="reveal" style="margin-top:1rem"><span class="pill"><i class="fa-regular fa-circle-question"></i> Q&amp;A open</span><span class="pill"><i class="fa-solid fa-mask"></i> You saw nothing</span></div>
+  </section>
+
+</div>
+
+<div class="hintbar" id="hintbar">tap right side / swipe → to advance · tap left to go back</div>
+
+<div class="controls">
+  <button class="ctrl big" id="cPrev" title="Previous"><i class="fa-solid fa-backward-step"></i></button>
+  <button class="ctrl big" id="cNext" title="Next"><i class="fa-solid fa-forward-step"></i></button>
+  <span class="counter" id="counter">1 / 28</span>
+  <span class="spacer"></span>
+  <button class="ctrl on" id="cSound" title="Sound FX"><i class="fa-solid fa-volume-high"></i></button>
+  <button class="ctrl on" id="cMusic" title="Music"><i class="fa-solid fa-music"></i></button>
+  <button class="ctrl" id="cAuto" title="Auto-play"><i class="fa-solid fa-clapperboard"></i></button>
+  <button class="ctrl" id="cFull" title="Fullscreen"><i class="fa-solid fa-expand"></i></button>
+</div>
+
+<script>
+/* ============ AUDIO ENGINE (Web Audio, fully synthesized) ============ */
+let AC=null, master, sfxGain, musGain, sfxOn=true, musOn=true, musTimer=null, step=0;
+function initAudio(){
+  if(AC) return;
+  AC=new (window.AudioContext||window.webkitAudioContext)();
+  master=AC.createGain(); master.gain.value=0.9; master.connect(AC.destination);
+  sfxGain=AC.createGain(); sfxGain.gain.value=0.85; sfxGain.connect(master);
+  musGain=AC.createGain(); musGain.gain.value=0.20; musGain.connect(master);
+}
+const T=()=>AC.currentTime;
+function tone(freq,t,dur,type,gain,dest,glide){
+  const o=AC.createOscillator(),g=AC.createGain();
+  o.type=type||'sine'; o.frequency.setValueAtTime(freq,t);
+  if(glide) o.frequency.exponentialRampToValueAtTime(Math.max(20,glide),t+dur);
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(gain||0.3,t+0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g); g.connect(dest||sfxGain); o.start(t); o.stop(t+dur+0.03);
+}
+function noise(t,dur,gain,type,freq,dest){
+  const len=Math.max(1,Math.floor(AC.sampleRate*dur));
+  const b=AC.createBuffer(1,len,AC.sampleRate), d=b.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=Math.random()*2-1;
+  const s=AC.createBufferSource(); s.buffer=b;
+  const f=AC.createBiquadFilter(); f.type=type||'highpass'; f.frequency.value=freq||1000;
+  const g=AC.createGain(); g.gain.setValueAtTime(gain||0.3,t); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  s.connect(f); f.connect(g); g.connect(dest||sfxGain); s.start(t); s.stop(t+dur);
+}
+const SFX={
+  pop(){const t=T(); tone(520,t,0.09,'sine',0.35,null,940);},
+  whoosh(){const t=T(); noise(t,0.3,0.22,'bandpass',1400);},
+  ding(){const t=T(); tone(880,t,0.16,'sine',0.3); tone(1320,t+0.07,0.26,'sine',0.26);},
+  sparkle(){const t=T(); [523,659,784,1046,1318].forEach((f,k)=>tone(f,t+k*0.06,0.2,'triangle',0.2));},
+  boing(){const t=T(); tone(620,t,0.35,'sine',0.32,null,120); tone(310,t+0.18,0.22,'sine',0.18,null,90);},
+  buzzer(){const t=T(); tone(165,t,0.42,'sawtooth',0.3,null,120); tone(120,t,0.42,'square',0.16);},
+  airhorn(){const t=T(); for(let r=0;r<3;r++){const tt=t+r*0.22; [277,330,415].forEach(f=>{
+      const o=AC.createOscillator(),g=AC.createGain(),lfo=AC.createOscillator(),lg=AC.createGain();
+      o.type='sawtooth'; o.frequency.setValueAtTime(f,tt); lfo.frequency.value=6; lg.gain.value=7; lfo.connect(lg); lg.connect(o.frequency);
+      g.gain.setValueAtTime(0.0001,tt); g.gain.exponentialRampToValueAtTime(0.15,tt+0.02);
+      g.gain.setValueAtTime(0.15,tt+0.15); g.gain.exponentialRampToValueAtTime(0.0001,tt+0.2);
+      o.connect(g); g.connect(sfxGain); lfo.start(tt); o.start(tt); o.stop(tt+0.21); lfo.stop(tt+0.21);});}},
+  sadtrombone(){const t=T(); [233,207,196,174].forEach((f,k)=>{const tt=t+k*0.34;
+      const o=AC.createOscillator(),g=AC.createGain(),fil=AC.createBiquadFilter(),lfo=AC.createOscillator(),lg=AC.createGain();
+      o.type='sawtooth'; o.frequency.setValueAtTime(f*1.06,tt); o.frequency.exponentialRampToValueAtTime(f*0.94,tt+0.3);
+      fil.type='lowpass'; fil.frequency.value=950; lfo.frequency.value=5; lg.gain.value=8; lfo.connect(lg); lg.connect(o.frequency);
+      g.gain.setValueAtTime(0.0001,tt); g.gain.exponentialRampToValueAtTime(0.3,tt+0.03); g.gain.exponentialRampToValueAtTime(0.0001,tt+0.31);
+      o.connect(fil); fil.connect(g); g.connect(sfxGain); lfo.start(tt); o.start(tt); o.stop(tt+0.33); lfo.stop(tt+0.33);});},
+  drumroll(){const t=T(),n=26; for(let k=0;k<n;k++) noise(t+k*0.045,0.05,0.1+0.14*(k/n),'bandpass',2400);
+      noise(t+n*0.045,0.45,0.4,'highpass',6500); tone(1200,t+n*0.045,0.4,'sine',0.14);},
+  rimshot(){const t=T();
+      tone(260,t,0.13,'sine',0.4,null,150); tone(220,t+0.18,0.13,'sine',0.4,null,130);
+      noise(t+0.34,0.45,0.4,'highpass',6500);},
+  scratch(){const t=T(); const o=AC.createOscillator(),g=AC.createGain(); o.type='sawtooth';
+      o.frequency.setValueAtTime(420,t); o.frequency.setValueAtTime(170,t+0.06); o.frequency.setValueAtTime(520,t+0.12); o.frequency.setValueAtTime(150,t+0.18);
+      g.gain.setValueAtTime(0.24,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.24); o.connect(g); g.connect(sfxGain); o.start(t); o.stop(t+0.26);
+      noise(t,0.24,0.12,'bandpass',1500);},
+  cheer(){const t=T(); for(let k=0;k<26;k++){const tt=t+Math.random()*1.7; noise(tt,0.1+Math.random()*0.12,0.05+Math.random()*0.06,'bandpass',1400+Math.random()*2600);}
+      [880,1320,1760].forEach((f,k)=>tone(f,t+0.1+k*0.05,0.5,'triangle',0.07));},
+  heartbeat(){const t=T(); tone(60,t,0.18,'sine',0.5,null,40); tone(60,t+0.28,0.2,'sine',0.5,null,40);}
+};
+function play(name){ if(!AC||!sfxOn) return; try{ if(AC.state==='suspended')AC.resume(); (SFX[name]||SFX.pop)(); }catch(e){} }
+
+/* background beat */
+function kick(t){const o=AC.createOscillator(),g=AC.createGain(); o.frequency.setValueAtTime(140,t); o.frequency.exponentialRampToValueAtTime(45,t+0.12);
+  g.gain.setValueAtTime(0.9,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.18); o.connect(g); g.connect(musGain); o.start(t); o.stop(t+0.2);}
+function snare(t){noise(t,0.13,0.4,'highpass',1800,musGain); tone(180,t,0.1,'triangle',0.25,musGain);}
+function hat(t){noise(t,0.03,0.16,'highpass',8000,musGain);}
+const BASS=[110,0,0,0, 0,0,164.8,0, 130.8,0,0,0, 0,98,0,0];
+function seqStep(){
+  if(!AC) return; const t=T()+0.06, s=step%16;
+  if(s===0||s===8||s===11) kick(t);
+  if(s===4||s===12) snare(t);
+  if(s%2===0) hat(t);
+  if(BASS[s]) tone(BASS[s],t,0.2,'triangle',0.16,musGain);
+  step++;
+}
+function startMusic(){ if(musTimer||!AC) return; const ms=(60/92)/4*1000; musTimer=setInterval(seqStep,ms); }
+function stopMusic(){ if(musTimer){clearInterval(musTimer); musTimer=null;} }
+
+/* ============ DECK LOGIC ============ */
+const slides=[...document.querySelectorAll('.slide')];
+const progress=document.getElementById('progress');
+const counter=document.getElementById('counter');
+let i=0, started=false, auto=false, autoTimer=null, revealTimer=null;
+
+function gifFail(img){ const d=document.createElement('div'); d.className=img.className+' gif-fallback'; d.textContent=img.dataset.fallback||'🎬';
+  d.style.height=getComputedStyle(img).height; d.style.minHeight='160px'; d.style.minWidth='160px'; img.replaceWith(d); }
+
+function clamp(n){ return Math.max(0,Math.min(slides.length-1,n)); }
+function unrevealed(sl){ return sl.querySelector('.reveal:not(.shown)'); }
+function revealOne(sl){ const el=unrevealed(sl); if(!el) return false; el.classList.add('shown'); play(el.dataset.sfx||'pop'); return true; }
+
+function show(n){
+  clearTimeout(autoTimer); clearTimeout(revealTimer);
+  i=clamp(n);
+  slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+  const sl=slides[i];
+  sl.querySelectorAll('.reveal').forEach(e=>e.classList.remove('shown'));
+  sl.querySelectorAll('.meter-fill').forEach(m=>m.style.width='0');
+  progress.style.width=((i+1)/slides.length*100)+'%';
+  counter.textContent=(i+1)+' / '+slides.length;
+  if(started){ play(sl.dataset.sfx||'whoosh'); enterSlide(sl); }
+}
+function enterSlide(sl){
+  if(sl.dataset.action==='confetti') setTimeout(burstConfetti,260);
+  if(sl.dataset.action==='poll') resetPoll();
+  if(sl.dataset.action==='meter') setTimeout(()=>sl.querySelectorAll('.meter-fill').forEach(m=>{m.style.width=m.dataset.w;play('buzzer');}),350);
+  if(auto) autoRun(sl);
+}
+function autoRun(sl){
+  const items=[...sl.querySelectorAll('.reveal')];
+  let k=0;
+  const tick=()=>{
+    if(!auto||slides[i]!==sl) return;
+    if(k<items.length){ revealOne(sl); k++; revealTimer=setTimeout(tick,1350); }
+    else {
+      if(sl.dataset.action==='poll' && !polled){ setTimeout(()=>vote('charlotte'),900); }
+      const d=(sl.dataset.dwell?parseFloat(sl.dataset.dwell):4)*1000;
+      autoTimer=setTimeout(()=>{ if(auto){ if(i<slides.length-1) show(i+1); else { auto=false; syncAutoBtn(); } } }, d);
+    }
+  };
+  revealTimer=setTimeout(tick,800);
+}
+function next(){ const sl=slides[i]; if(!auto && revealOne(sl)) return; if(i<slides.length-1) show(i+1); }
+function prev(){ if(i>0){ show(i-1); slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.add('shown')); } }
+
+/* poll */
+let polled=false;
+function resetPoll(){ polled=false; document.querySelectorAll('.poll-btn').forEach(b=>{b.disabled=false;b.classList.remove('winner','loser');}); const r=document.getElementById('pollResult'); if(r) r.classList.remove('show'); }
+function vote(choice){
+  if(polled) return; polled=true; play('drumroll');
+  document.querySelectorAll('.poll-btn').forEach(b=>b.disabled=true);
+  setTimeout(()=>{
+    play('airhorn');
+    const win=document.querySelector('.poll-btn[data-c="charlotte"]'); if(win) win.classList.add('winner');
+    if(choice!=='charlotte'){ const l=document.querySelector('.poll-btn[data-c="'+choice+'"]'); if(l) l.classList.add('loser'); }
+    const r=document.getElementById('pollResult'); if(r) r.classList.add('show');
+    burstConfetti();
+  },1250);
+}
+
+/* confetti */
+const cc=document.getElementById('confetti'), cx=cc.getContext('2d'); let parts=[], rafOn=false;
+function sizeCanvas(){ cc.width=innerWidth; cc.height=innerHeight; }
+function burstConfetti(){
+  sizeCanvas(); const cols=['#ff4d97','#ffd54a','#7b2ff7','#27d17a','#ff3b5c','#34c3ff','#ffffff'];
+  for(let k=0;k<170;k++) parts.push({x:Math.random()*cc.width,y:-20-Math.random()*cc.height*0.4,vx:(Math.random()-0.5)*5,vy:2+Math.random()*5,r:4+Math.random()*7,c:cols[k%cols.length],rot:Math.random()*6,vr:(Math.random()-0.5)*0.35});
+  if(!rafOn){ rafOn=true; rafLoop(); }
+}
+function rafLoop(){
+  cx.clearRect(0,0,cc.width,cc.height);
+  for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=0.07; p.rot+=p.vr;
+    cx.save(); cx.translate(p.x,p.y); cx.rotate(p.rot); cx.fillStyle=p.c; cx.fillRect(-p.r/2,-p.r/2,p.r,p.r*0.6); cx.restore(); }
+  parts=parts.filter(p=>p.y<cc.height+40);
+  if(parts.length) requestAnimationFrame(rafLoop); else { rafOn=false; cx.clearRect(0,0,cc.width,cc.height); }
+}
+addEventListener('resize',sizeCanvas);
+
+/* controls */
+const cSound=document.getElementById('cSound'),cMusic=document.getElementById('cMusic'),cAuto=document.getElementById('cAuto'),cFull=document.getElementById('cFull');
+function syncAutoBtn(){ cAuto.classList.toggle('on',auto); }
+cSound.onclick=()=>{ sfxOn=!sfxOn; cSound.classList.toggle('on',sfxOn); cSound.innerHTML='<i class="fa-solid '+(sfxOn?'fa-volume-high':'fa-volume-xmark')+'"></i>'; if(sfxOn)play('pop'); };
+cMusic.onclick=()=>{ musOn=!musOn; cMusic.classList.toggle('on',musOn); cMusic.innerHTML='<i class="fa-solid '+(musOn?'fa-music':'fa-volume-xmark')+'"></i>'; if(musOn)startMusic(); else stopMusic(); };
+cAuto.onclick=()=>{ auto=!auto; syncAutoBtn(); play('pop'); if(auto) autoRun(slides[i]); else {clearTimeout(autoTimer);clearTimeout(revealTimer);} };
+cFull.onclick=()=>{ if(!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); };
+document.getElementById('cPrev').onclick=()=>{play('whoosh');prev();};
+document.getElementById('cNext').onclick=()=>next();
+/* full-surface tap-to-advance (skips interactive elements); left 22% = back */
+document.getElementById('deck').addEventListener('click',e=>{
+  if(!started) return;
+  if(e.target.closest('button,a,input,label,.poll-btn')) return;
+  if(e.clientX < innerWidth*0.22){ play('whoosh'); prev(); } else { next(); }
+});
+
+document.addEventListener('keydown',e=>{
+  if(!started) return;
+  if(['ArrowRight',' ','Enter','PageDown'].includes(e.key)){e.preventDefault();next();}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();play('whoosh');prev();}
+  else if(e.key==='Home')show(0);
+  else if(e.key==='End')show(slides.length-1);
+  else if(e.key.toLowerCase()==='f')cFull.onclick();
+  else if(e.key.toLowerCase()==='m')cMusic.onclick();
+  else if(e.key.toLowerCase()==='a')cAuto.onclick();
+});
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx; if(dx<-40)next(); else if(dx>40){play('whoosh');prev();}},{passive:true});
+
+/* start */
+function startShow(){
+  initAudio();
+  sfxOn=document.getElementById('optSound').checked;
+  musOn=document.getElementById('optMusic').checked;
+  auto=document.getElementById('optAuto').checked;
+  cSound.classList.toggle('on',sfxOn); cSound.innerHTML='<i class="fa-solid '+(sfxOn?'fa-volume-high':'fa-volume-xmark')+'"></i>';
+  cMusic.classList.toggle('on',musOn); cMusic.innerHTML='<i class="fa-solid '+(musOn?'fa-music':'fa-volume-xmark')+'"></i>';
+  syncAutoBtn();
+  document.body.classList.remove('pre');
+  document.getElementById('overlay').classList.add('hide');
+  started=true;
+  if(musOn) startMusic();
+  if(AC && AC.state==='suspended') AC.resume();
+  show(0);
+}
+document.getElementById('startBtn').onclick=startShow;
+
+show(0);
+</script>
+
+<script>
+/* ===== PASSCODE LOCK (soft gate — code hashed, not plaintext) ===== */
+(function(){
+  const KEYHASH=2490977801; // FNV-1a of the 4-digit code
+  function fnv(s){let h=0x811c9dc5;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193);}return h>>>0;}
+  const lock=document.getElementById('lock');
+  if(!lock) return;
+  if(sessionStorage.getItem('tea_unlocked')==='1'){ lock.remove(); return; }
+  const dots=[...lock.querySelectorAll('.dot')];
+  const err=lock.querySelector('.lockerr');
+  const box=lock.querySelector('.lockbox');
+  let entry='';
+  const render=()=>dots.forEach((d,i)=>d.classList.toggle('on',i<entry.length));
+  function wrong(){ err.classList.add('show'); box.classList.add('shake'); setTimeout(()=>box.classList.remove('shake'),460); entry=''; render(); }
+  function check(){ if(fnv(entry)===KEYHASH){ sessionStorage.setItem('tea_unlocked','1'); lock.classList.add('open'); setTimeout(()=>lock.remove(),650); } else wrong(); }
+  function add(d){ if(entry.length>=4) return; err.classList.remove('show'); entry+=d; render(); if(entry.length===4) setTimeout(check,180); }
+  const back=()=>{ entry=entry.slice(0,-1); render(); };
+  lock.querySelectorAll('[data-k]').forEach(b=>b.addEventListener('click',()=>add(b.dataset.k)));
+  lock.querySelector('[data-act=back]').addEventListener('click',back);
+  lock.querySelector('[data-act=clear]').addEventListener('click',()=>{entry='';render();err.classList.remove('show');});
+  document.addEventListener('keydown',e=>{
+    if(!document.body.contains(lock)||lock.classList.contains('open')) return;
+    if(e.key>='0'&&e.key<='9'){e.preventDefault();add(e.key);}
+    else if(e.key==='Backspace'){e.preventDefault();back();}
+    else if(e.key==='Enter'){e.preventDefault();check();}
+  });
+  render();
+})();
+</script>
+</body>
+</html>
